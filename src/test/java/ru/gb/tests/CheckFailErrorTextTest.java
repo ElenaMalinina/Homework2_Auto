@@ -14,7 +14,7 @@ public class CheckFailErrorTextTest extends BaseTest {
     @Test
     @Description ("Проверяем поведения теста при падение проверки сообщения об ошибке валидного email")
     public void CheckFailEmptyEmail() {
-        openApp("pixel 11")
+        openApp()
                 .clickLoginMenuButton()
                 .checkLoginErrorText(VALID_EMAIL_ADDRESS);
     }

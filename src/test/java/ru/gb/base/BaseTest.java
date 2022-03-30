@@ -2,6 +2,7 @@ package ru.gb.base;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -17,10 +18,10 @@ import static org.apache.commons.io.IOUtils.close;
 public class BaseTest {
 
     // метод, который будет открывать наше приложение на телефоне
-    public MainPage openApp(String device) {
+    public MainPage openApp() {
         WebDriver driver = null;
         try {
-            driver = getAndroidDriver(device);
+            driver = getDriver();
         } catch (MalformedURLException e) {
             e.printStackTrace();
             System.out.println("Opps, we have problems with URL for driver!");
@@ -30,40 +31,48 @@ public class BaseTest {
         // возвращаем главную страницу для будущей работы с ней в тесте
         return new MainPage();
     }
-        @AfterClass
-        public void setDown() {
-            try {
-                close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    public AndroidDriver getAndroidDriver(String device) throws MalformedURLException {
+
+    public static WebDriver getDriver() throws MalformedURLException {
         // устанавливаем capabilities
         DesiredCapabilities capabilities = new DesiredCapabilities();
-
-            capabilities.setCapability("platformName", "Android");
+        switch (System.getProperty("platform")) {
+            case "Android":
+                capabilities.setCapability("platformName", "Android");
              //указываем для appium на каком девайсе хотим запускать тест.
-            switch (device){
-                case "pixel 10":
-                    capabilities.setCapability("udid", "emulator-5554");
-                    break;
-                case "pixel 11":
-                    capabilities.setCapability("udid", "emulator-5558");
-                    break;
-            }
-
-//        capabilities.setCapability("platformName", "Android");
-//        capabilities.setCapability("deviceName", "Pixel");
-//        capabilities.setCapability("platformVersion", "10");
-//        capabilities.setCapability("udid", "emulator-5554");
-//        capabilities.setCapability("automationName", "UiAutomator2");
+//            switch (device){
+//                case "pixel 10":
+//                    capabilities.setCapability("udid", "emulator-5554");
+//                    break;
+//                case "pixel 11":
+//                    capabilities.setCapability("udid", "emulator-5558");
+//                    break;
+//            }
+        capabilities.setCapability("platformName", "Android");
+        capabilities.setCapability("deviceName", "Pixel");
+        capabilities.setCapability("platformVersion", "10");
+        capabilities.setCapability("udid", "emulator-5554");
+        capabilities.setCapability("automationName", "UiAutomator2");
         capabilities.setCapability("app", "C:/Users/Midas/Downloads/Android-NativeDemoApp-0.2.1.apk");
+        break;
+            case "iOS":
+                // устанавливаем capabilities.
+        capabilities.setCapability("platformName", "iOS");
+        capabilities.setCapability("deviceName", "iPhone");
+        capabilities.setCapability("platformVersion", "15");
+        capabilities.setCapability("udid", "2E20F3A4-ACC1-4799-A4F5-83358E56AB2E");
+        capabilities.setCapability("automationName", "XCUITest");
+        capabilities.setCapability("app", "/C:/Users/Midas/Downloads/iOS-Simulator-NativeDemoApp-0.2.1.app");
+        break;
+        }
         // папка для сохранения скриншотов selenide
         Configuration.reportsFolder = "screenshots/actual";
         // устанавливаем и открываем приложение
-        return new AndroidDriver(new URL("http://127.0.0.1:4444/wd/hub"), capabilities);
+        return new AppiumDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+    }
+    @AfterClass
+    public void setDown() throws IOException {
+       close();
+        }
     }
 
 
-}

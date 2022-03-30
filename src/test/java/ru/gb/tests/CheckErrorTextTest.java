@@ -14,10 +14,11 @@ public class CheckErrorTextTest extends BaseTest {
     @Test
     @Description ("Проверяем сообщение об ошибке при невалидной email.")
     public void CheckEmptyEmail() {
-        openApp("pixel 10")
+        openApp()
                 .clickLoginMenuButton()
                 .clickLoginButton()
                 .checkLoginErrorText(VALID_EMAIL_ADDRESS);
+
     }
 
 
