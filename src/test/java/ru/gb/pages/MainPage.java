@@ -5,7 +5,8 @@ import com.github.romankh3.image.comparison.ImageComparisonUtil;
 import com.github.romankh3.image.comparison.model.ImageComparisonResult;
 import com.github.romankh3.image.comparison.model.ImageComparisonState;
 import io.qameta.allure.Step;
-import ru.gb.locators.MainPageLocators;
+import ru.gb.locators.LocatorService;
+import ru.gb.locators.interfaces.MainPageLocators;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,7 +16,7 @@ import static org.testng.AssertJUnit.assertEquals;
 
 public class MainPage {
     private MainPageLocators locator() {
-        return new MainPageLocators();
+        return LocatorService.MAIN_PAGE_LOCATORS;
     }
 
     @Step("Кликаем по кнопке логина в меню и переходим на новую страницу логина")
@@ -61,4 +62,9 @@ public class MainPage {
         return this;
     }
 
+    @Step("Кликаем по кнопке 'swipe' в форме")
+    public SwipePage clickSwipeButton() {
+        $(locator().swipeButton()).click();
+        return new SwipePage();
+    }
 }

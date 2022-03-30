@@ -2,13 +2,14 @@ package ru.gb.pages;
 
 import com.codeborne.selenide.Condition;
 import io.qameta.allure.Step;
-import ru.gb.locators.LoginPageLocators;
+import ru.gb.locators.LocatorService;
+import ru.gb.locators.interfaces.LoginPageLocators;
 
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
     private LoginPageLocators locator() {
-        return new LoginPageLocators();
+        return LocatorService.LOGIN_PAGE_LOCATORS;
     }
 
     @Step("Кликаем по кнопке 'логин' в форме")
